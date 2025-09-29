@@ -46,6 +46,7 @@ def imageprocessor(id=None):
         print(f'Width is {width}, height is {height}')
 
         calculate_height=int(height/width*size)
+        print(f'New width is {size}, new height is {calculate_height}')
 
         #print('Loading: ',full_download_path)
         if image is None:
