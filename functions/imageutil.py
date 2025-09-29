@@ -58,8 +58,6 @@ def imageprocessor(id=None):
             resize_image = cv2.resize(image, (calculate_width,size))
             print(f'Vertical image, saved with width: {calculate_width} and height {size}.')
 
-
-        
         save = cv2.imwrite(full_processed_path,resize_image)
 
         if save:
