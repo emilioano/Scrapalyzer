@@ -69,4 +69,4 @@ def imageprocessor(id=None):
             print(f'No image saved in {full_processed_path}')
 
 
-imagedownloader('https://cdn.pixabay.com/photo/2018/12/03/19/26/forest-3854077_1280.jpg')
+imagedownloader('https://static.vecteezy.com/ti/gratis-foton/p1/51034254-vertikal-bild-av-tradtopparna-i-en-tat-gron-skog-mot-de-himmel-fotona.jpg')
