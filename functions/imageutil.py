@@ -44,15 +44,22 @@ def imageprocessor(id=None):
 
         height,width = image.shape[:2]
         print(f'Width is {width}, height is {height}')
-
-        calculate_height=int(height/width*size)
-        print(f'New width is {size}, new height is {calculate_height}')
-
+        
         #print('Loading: ',full_download_path)
         if image is None:
             print('Could not load any picture')
 
-        resize_image = cv2.resize(image, (512,calculate_height))
+        if width >= height:
+            calculate_height=int(height/width*size)
+            resize_image = cv2.resize(image, (size,calculate_height))
+            print(f'Horinsontal image, saved with width: {size} and height: {calculate_height}.')
+        else:
+            calculate_width=int(width/height*size)
+            resize_image = cv2.resize(image, (calculate_width,size))
+            print(f'Vertical image, saved with width: {calculate_width} and height {size}.')
+
+
+        
         save = cv2.imwrite(full_processed_path,resize_image)
 
         if save:
@@ -63,4 +70,4 @@ def imageprocessor(id=None):
             print(f'No image saved in {full_processed_path}')
 
 
-imagedownloader('https://cdn.prod.website-files.com/60e4d0d0155e62117f4faef3/621531f8df76222362702e67_jeremy-hynes-B_12uv-QLHY-unsplash-DeNoiseAI-severe-noise.jpg')
+imagedownloader('https://cdn.pixabay.com/photo/2018/12/03/19/26/forest-3854077_1280.jpg')
