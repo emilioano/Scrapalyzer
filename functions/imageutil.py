@@ -48,6 +48,7 @@ def imageprocessor(id=None):
         #print('Loading: ',full_download_path)
         if image is None:
             print('Could not load any picture')
+            continue
 
         if width >= height:
             calculate_height=int(height/width*size)
