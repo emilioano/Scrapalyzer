@@ -38,7 +38,7 @@ def imageprocessor(id=None):
         if id is None:
             full_processed_path = processed_folder+file
         else:
-            full_processed_path = processed_folder+file+'_'+id+'.jpg'
+            full_processed_path = processed_folder+id+'_'+file
 
         image = cv2.imread(full_download_path)
 
