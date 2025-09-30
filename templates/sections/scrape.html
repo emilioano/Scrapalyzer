@@ -1,0 +1,21 @@
+<section class="card">
+	<h2 class="title">Scrape</h2>
+	<form
+		class="form"
+		action="{{ url_for('scrape_form') }}"
+		method="post">
+		<label
+			class="input_label"
+			for="url"
+			>URL</label
+		>
+		<input
+			id="url"
+			class="form_input"
+			type="url"
+			name="url"
+			placeholder="https://example.com/img"
+			required />
+		<button class="submit_button">scrape</button>
+	</form>
+</section>
