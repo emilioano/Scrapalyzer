@@ -45,6 +45,13 @@ def imageprocessor(id=None):
         height,width = image.shape[:2]
         print(f'Width is {width}, height is {height}')
         
+        # Object segmentation
+        # Todo
+
+
+
+
+
         #print('Loading: ',full_download_path)
         if image is None:
             print('Could not load any picture')
@@ -69,4 +76,4 @@ def imageprocessor(id=None):
             print(f'No image saved in {full_processed_path}')
 
 
-imagedownloader('https://static.vecteezy.com/ti/gratis-foton/p1/51034254-vertikal-bild-av-tradtopparna-i-en-tat-gron-skog-mot-de-himmel-fotona.jpg')
+imagedownloader('https://st4.depositphotos.com/27201292/40335/i/1600/depositphotos_403356616-stock-photo-vertical-shot-path-forest.jpg')
