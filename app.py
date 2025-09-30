@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 # Define Paths
 base_dir_path = os.path.dirname(os.path.realpath(__file__))
 downloads_dir_path = os.path.join(base_dir_path, 'data/downloads')
+processed_dir_path = os.path.join(base_dir_path, 'data/processed')
 dogs_dir_path = os.path.join(base_dir_path, 'data/analysed/dogs')
 cats_dir_path = os.path.join(base_dir_path, 'data/analysed/cats')
 
@@ -68,5 +69,5 @@ def scrape_form():
 
 
 if __name__ == '__main__':
-    ensure_folder([downloads_dir_path, dogs_dir_path, cats_dir_path])
+    ensure_folder([downloads_dir_path, dogs_dir_path, cats_dir_path, processed_dir_path])
     app.run(debug=True, port=8000)
