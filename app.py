@@ -39,9 +39,9 @@ def ensure_folder(folders: str | list) -> None:
             for folder in folders:
                 os.makedirs(folder, exist_ok=True)
                 logger.info(f' * Ensured folder exists: {folder}')
-        except OSError as e:        
+        except OSError as e:
             logger.error(f' * Failed to ensure folders: {folders} {e}')
-            raise        
+            raise
 
 # Simple helper function
 def dir_to_list(dir: str) -> list:
@@ -49,7 +49,7 @@ def dir_to_list(dir: str) -> list:
         return []
     return os.listdir(dir)
 
-# Route to index function, loads file names from downloads folder.
+# Route to index function, loads file names from downloads folder
 @app.route('/', methods=['GET'])
 def index():
     downloads = dir_to_list(downloads_dir_path)
@@ -72,10 +72,21 @@ def scrape_form():
     except ValueError as e:
         logger.error(f' * Input error: {e}')
 
-    # Reload index after url is sent.
+    # Reload index after url is sent
+    return redirect(url_for('index'))
+
+# Route to run the analyze script
+@app.route('/run_analyze', methods=['POST'])
+def run_analyze():
+    # Placeholder for analyze script
+    logger.info(f' * Analyzing...')
+    logger.info(f' * Analyzed.')
+    logger.info(' * Images saved to analyzed cat/dog folders.')
+    # Reload index
     return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
-    ensure_folder([downloads_dir_path, dogs_dir_path, cats_dir_path, processed_dir_path, modules_dir_path, utils_dir_path, scraper_dir_path, analyzer_dir_path])
+    ensure_folder([downloads_dir_path, dogs_dir_path, cats_dir_path, processed_dir_path,
+                  modules_dir_path, utils_dir_path, scraper_dir_path, analyzer_dir_path])
     app.run(debug=True, port=8000)
