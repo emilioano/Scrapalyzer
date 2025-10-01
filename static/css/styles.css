@@ -67,6 +67,7 @@ h1, h2 { margin: 0 0 12px; }
 }
 
 .submit_button {
+  max-width: 250px;
   padding: 10px 18px;
   border: none;
   border-radius: 6px;
