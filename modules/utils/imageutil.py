@@ -15,10 +15,10 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-download_folder='../../data/downloads/'
+download_folder='data/downloads/'
 os.makedirs(download_folder, exist_ok=True)
 
-processed_folder='../../data/processed/'
+processed_folder='data/processed/'
 os.makedirs(processed_folder, exist_ok=True)
 
 size = 512
@@ -146,4 +146,4 @@ def imageprocessor(id=None):
 '''
 
 #imagedownloader('https://st4.depositphotos.com/27201292/40335/i/1600/depositphotos_403356616-stock-photo-vertical-shot-path-forest.jpg')
-imageprocessor()
+#imageprocessor()
