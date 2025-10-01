@@ -2,6 +2,17 @@ import os
 import requests
 import cv2
 
+import torch
+import numpy as np
+
+
+from torchvision.models.detection import maskrcnn_resnet50_fpn
+from torchvision.models.detection.mask_rcnn import MaskRCNN_ResNet50_FPN_Weights
+from torchvision.transforms import functional as F
+
+
+
+
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -32,31 +43,90 @@ def imagedownloader(url,id=None):
 
 
 def imageprocessor(id=None):
+
+    weights = MaskRCNN_ResNet50_FPN_Weights.DEFAULT
+    model = maskrcnn_resnet50_fpn(weights=weights)
+    model.eval()
+
     for file in os.listdir(download_folder):
         full_download_path = download_folder+file
         
-        if id is None:
-            full_processed_path = processed_folder+file
-        else:
-            full_processed_path = processed_folder+id+'_'+file
-
         image = cv2.imread(full_download_path)
 
-        height,width = image.shape[:2]
-        print(f'Width is {width}, height is {height}')
-        
-        # Object segmentation
-        # Todo
-
-
-
-
-
-        #print('Loading: ',full_download_path)
         if image is None:
             print('Could not load any picture')
             continue
 
+        height,width = image.shape[:2]
+        print(f'Loaded Image {file} Width is {width}, height is {height}')
+        
+        # Object segmentation
+        
+        image_rgb = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
+        image_tensor = F.to_tensor(image_rgb).unsqueeze(0)
+
+        # Don't trace gradients, better performance
+        with torch.no_grad():
+            prediction = model(image_tensor)[0]
+
+        # Detection of objects in image
+        object_counter=0
+        for i in range(len(prediction['scores'])):
+            if prediction['scores'][i] > 0.8:
+                mask = prediction["masks"][i, 0].cpu().numpy()
+                mask_binary = mask > 0.5
+        
+            # Creating new image with segmentet object only
+            object = np.zeros_like(image_rgb)
+            object[mask_binary] = image_rgb[mask_binary]
+
+            # Cropping object to its bounding box
+            y_indices, x_indices = np.where(mask_binary)
+            if y_indices.size > 0 and x_indices.size > 0:
+                y_min, y_max = y_indices.min(), y_indices.max()
+                x_min, x_max = x_indices.min(), x_indices.max()
+                object_crop = object[y_min:y_max+1, x_min:x_max+1]
+                object_width = x_max-x_min
+                object_height = y_max-y_min
+                print(f'Object {object_counter} Height: {object_height}. y_min: {y_min}, y_max: {y_max}')
+                print(f'Object {object_counter} Width: {object_width}. y_min: {x_min}, y_max: {x_max}')
+
+                #Save object as separate image
+                object_bgr = cv2.cvtColor(object_crop, cv2.COLOR_RGB2BGR)
+
+                if id is None:
+                    full_processed_path = processed_folder+'object_'+str(object_counter)+'_'+file
+                else:
+                    full_processed_path = processed_folder+id+'_'+'object_'+str(object_counter)+'_'+file
+
+                
+
+                if object_width > size or object_height > size:
+                    if object_width >= object_height:
+                        calculate_height=int(object_height/object_width*size)
+                        print(f'Object {object_counter} height: {object_height}, object width: {object_width}. Calculate height: {calculate_height}')
+                        object_resized = cv2.resize(object_bgr, (size,calculate_height))
+                        print(f'Object {object_counter}. Detected horinsontally aligned cropped image with size larger than {size} pixels, adjusted to width: {size} and height: {calculate_height}.')
+                    elif object_height >= object_width:
+                        calculate_width=int(width/height*size)
+                        object_resized = cv2.resize(object_bgr, (calculate_width,size))
+                        print(f'Object {object_counter}. Detected vertically aliged cropped image detectred larger than {size} pixels, adjusted to width: {calculate_width} and height {size}.')
+                else:
+                    object_resized=object_bgr
+
+                save = cv2.imwrite(full_processed_path,object_resized)
+
+                if save:
+                    print(f'Image {full_processed_path} saved')
+                    #os.remove(full_download_path)
+                    #print(f'Image {full_download_path} removed')
+                else:
+                    print(f'No image saved in {full_processed_path}')
+
+                object_counter+=1
+
+        
+'''
         if width >= height:
             calculate_height=int(height/width*size)
             resize_image = cv2.resize(image, (size,calculate_height))
@@ -74,6 +144,7 @@ def imageprocessor(id=None):
             print(f'Image {full_download_path} removed')
         else:
             print(f'No image saved in {full_processed_path}')
+'''
 
-
-imagedownloader('https://st4.depositphotos.com/27201292/40335/i/1600/depositphotos_403356616-stock-photo-vertical-shot-path-forest.jpg')
+#imagedownloader('https://st4.depositphotos.com/27201292/40335/i/1600/depositphotos_403356616-stock-photo-vertical-shot-path-forest.jpg')
+imageprocessor()
