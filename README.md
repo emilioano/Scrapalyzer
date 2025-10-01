@@ -32,3 +32,30 @@ Analyzer - Robin
 Web & Interface - Viktor
 
 Imageutilities - Emil
+
+
+-------------------
+
+
+[ Nahuel - Scraper ] 
+       |
+       v
+   (hämtade bilder i data/downloads/)
+       |
+       v
+[ Emil - Image Utils ]
+       |
+       v
+ (förbehandlade bilder i data/processed/)
+       |
+       v
+[ Robin - Classifier ]
+       |
+       v
+ (klassificering -> data/analysed/cats, dogs)
+       |
+       v
+[ Viktor - Web/Flask ]
+       |
+       v
+ (visar resultatet i webbsida via templates/)
