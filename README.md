@@ -37,25 +37,28 @@ Imageutilities - Emil
 -------------------
 
 
+
+```text
 [ Nahuel - Scraper ] 
        |
        v
-   (hämtade bilder i data/downloads/)
+   (downloaded images in data/downloads/)
        |
        v
 [ Emil - Image Utils ]
        |
        v
- (förbehandlade bilder i data/processed/)
+ (preprocessed images in data/processed/)
        |
        v
 [ Robin - Classifier ]
        |
        v
- (klassificering -> data/analysed/cats, dogs)
+ (classification -> data/analysed/cats, dogs)
        |
        v
 [ Viktor - Web/Flask ]
        |
        v
- (visar resultatet i webbsida via templates/)
+ (displays results in web page via templates/)
+
