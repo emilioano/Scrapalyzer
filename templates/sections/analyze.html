@@ -1,3 +1,13 @@
 <section class="card">
 	<h2 class="title">Analyze</h2>
+	<form
+		class="form"
+		action="{{ url_for('run_analyze') }}"
+		method="post">
+		<button
+			class="submit_button"
+			type="submit">
+			Run analyze
+		</button>
+	</form>
 </section>
