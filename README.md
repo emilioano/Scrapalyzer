@@ -23,7 +23,7 @@ Web front lists results in different columns
 
 
 
-Roles:
+## Roles:
 
 Scraper - Nahuel
 
@@ -62,7 +62,7 @@ Image utilities - Emil
        v
  (displays results in web page via templates/)
 
-
+```
 
 -------------------
 
@@ -96,3 +96,4 @@ Scrapalyzer/
 ├── templates/
 ├── static/
 └── requirements.txt
+```
