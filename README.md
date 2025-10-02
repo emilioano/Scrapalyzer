@@ -1,29 +1,29 @@
-# Scrapalyzer
+## Scrapalyzer
+
+Scrapalyzer is a Python group project where we scrape images, process them, classify them with AI and display the result in a web interface
+
 This project is a Python course group assignment . AI developer Jensen Yrkeshögskola.
 
 
-Temporary Readme notes:
-
-
 -------------------
 
-Flödet:
-Webfront där användare matar in en url
+## Project flow:
 
-Weburl skickas till scraper som plockar ut bildadresser, bilder över ett visst antal pixlar.
+Web front where a user provides a URL
 
-Scraper loopar in listan på bidladresser i imageutil > imagedownloader som sparar alla bilder till downloads/
+Scraper fetches image links (filters by pixels)
 
-Imageutil > imageprocessor förädlar bilderna, t.ex plockar ut varje objekt, resizar sparar ner dom i processed-mappen.
+Image utilities download and preprocess images
 
-Analyzer, plockar upp filer från processed/, gör en identifiering, analyzern placerar sedan bilderna i motsvarande folder för vilket djur som identifierats, t.ex cats/ eller dogs/.
+Analyzer classifies processed images (cats/dogs)
 
-Webfront listar resultaten i olika spalter.
+Web front lists results in different columns
 
 -------------------
 
 
-Ansvarsområden:
+
+Roles:
 
 Scraper - Nahuel
 
@@ -31,12 +31,12 @@ Analyzer - Robin
 
 Web & Interface - Viktor
 
-Imageutilities - Emil
+Image utilities - Emil
 
 
 -------------------
 
-
+## Workflow
 
 ```text
 [ Nahuel - Scraper ] 
@@ -62,3 +62,37 @@ Imageutilities - Emil
        v
  (displays results in web page via templates/)
 
+
+
+-------------------
+
+## Installation & Setup
+
+git clone git@github.com:emilioano/Scrapalyzer.git / https://github.com/emilioano/Scrapalyzer.git (SSH / HTTPS)
+cd Scrapalyzer
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+-------------------
+
+## Project Structure
+
+
+```plaintext
+Scrapalyzer/
+├── app.py
+├── services/
+│   ├── scraper/
+│   │   └── scraper.py
+│   ├── analyzer/
+│   │   └── classifier.py
+│   └── utils/
+│       └── image_utils.py
+├── data/
+│   ├── downloads/
+│   ├── processed/
+│   └── analyzed/
+├── templates/
+├── static/
+└── requirements.txt
