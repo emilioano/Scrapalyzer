@@ -205,3 +205,10 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+
+
+# Local model
+modules/analyzer/models/
+modules/analyzer/models/vit-base-patch16-224/pytorch_model.bin
