@@ -69,9 +69,13 @@ Image utilities - Emil
 ## Installation & Setup
 
 git clone git@github.com:emilioano/Scrapalyzer.git / https://github.com/emilioano/Scrapalyzer.git (SSH / HTTPS)
+
 cd Scrapalyzer
+
 python3 -m venv venv
+
 source venv/bin/activate
+
 pip install -r requirements.txt
 
 -------------------
