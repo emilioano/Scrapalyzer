@@ -1,11 +1,11 @@
 import os
 import logging
 from config import DevConfig, ProdConfig
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from modules.analyzer.analyzer import ImageAnalyzer
 from modules.utils.imageutil import imageprocessor
 
-## FLYTTA UT KODEN NEDAN TILL UTILS ELLER ANALYZER
+# FLYTTA UT KODEN NEDAN TILL UTILS ELLER ANALYZER
 from huggingface_hub import snapshot_download
 
 model_dir = "modules/analyzer/models/vit-base-patch16-224"
@@ -93,6 +93,10 @@ def run_analyze():
     # Reload index after keywords are sent
     return redirect(url_for('index'))
 
+# Serve files from directory to website
+@app.route("/downloads/<path:filename>")
+def downloaded_image(filename):
+    return send_from_directory(app.config["DOWNLOADS_DIR"], filename)
 
 if __name__ == '__main__':
     # Set if True if Development or False if Production (Production env not implemented)
