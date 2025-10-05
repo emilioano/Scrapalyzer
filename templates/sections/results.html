@@ -1,3 +1,26 @@
 <section class="card">
 	<h2 class="title">Results</h2>
+
+	{% if categories %}
+		{% for category in categories %}
+			<div class="category-block">
+				<h3 class="subtitle">{{ category.name }}</h3>
+				<ul class="grid">
+					{% for file in category.files %}
+						<li>
+							<img
+								src="{{ url_for('analyzed_image', filename=file) }}"
+								alt="{{ file }}"
+								class="image"
+							/>
+						</li>
+					{% else %}
+						<li>No images in this category.</li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% endfor %}
+	{% else %}
+		<p>No analyzed categories yet.</p>
+	{% endif %}
 </section>

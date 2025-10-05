@@ -41,11 +41,37 @@ def dir_to_list(dir: str) -> list:
         return []
     return os.listdir(dir)
 
+# Get sub folders paths and category names
+def get_files_by_category(folder):
+    category_list = []
+    # Get the folder path and folder name for folder and each subfolder
+    for folder_path in os.walk(folder):
+        dir_path = folder_path[0]
+        files_path = sorted(folder_path[2])
+        category_name = os.path.basename(os.path.normpath(dir_path))
+        # Get all files in this subfolder
+        files = [os.path.join(category_name, item) for item in files_path]
+        category = dict(
+            path=dir_path,
+            # Get the name from the last part of the path, normalized to work across different OS
+            name= category_name,
+            # Add the files list so the template doesn't need os.listdir
+            files=files
+        )
+        category_list.append(category)
+
+    # Remove the root folder from list if list is not empty
+    if category_list:
+        category_list.pop(0)
+
+    return category_list
+
 # Route to index function, loads file names from downloads folder
 @app.route('/', methods=['GET'])
 def index():
     downloads = dir_to_list(app.config["DOWNLOADS_DIR"])
-    return render_template('index.html', downloads=downloads)
+    categories = get_files_by_category(app.config["ANALYZED_DIR"])
+    return render_template('index.html', downloads=downloads, categories=categories)
 
 # Route to post url input by the user, sent to scrape
 @app.route('/scrape_form', methods=['POST'])
@@ -93,10 +119,15 @@ def run_analyze():
     # Reload index after keywords are sent
     return redirect(url_for('index'))
 
-# Serve files from directory to website
+# Serve files from downloads directory to website
 @app.route("/downloads/<path:filename>")
 def downloaded_image(filename):
     return send_from_directory(app.config["DOWNLOADS_DIR"], filename)
+
+# Serve files from analyzed directory to website
+@app.route("/data/analyzed/<path:filename>")
+def analyzed_image(filename):
+    return send_from_directory(app.config["ANALYZED_DIR"], filename)
 
 if __name__ == '__main__':
     # Set if True if Development or False if Production (Production env not implemented)
