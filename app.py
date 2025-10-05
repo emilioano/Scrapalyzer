@@ -2,6 +2,21 @@ import os
 import logging
 from config import DevConfig, ProdConfig
 from flask import Flask, render_template, request, redirect, url_for
+from modules.analyzer.analyzer import ImageAnalyzer
+from modules.utils.imageutil import imageprocessor
+
+## FLYTTA UT KODEN NEDAN TILL UTILS ELLER ANALYZER
+from huggingface_hub import snapshot_download
+
+model_dir = "modules/analyzer/models/vit-base-patch16-224"
+needed_files = ["config.json", "pytorch_model.bin", "preprocessor_config.json"]
+
+if not all(os.path.exists(os.path.join(model_dir, f)) for f in needed_files):
+    snapshot_download(
+        repo_id="google/vit-base-patch16-224",
+        local_dir=model_dir,
+    )
+# --------------------------------------------------
 
 app = Flask(__name__)
 logger = logging.getLogger(__name__)
@@ -62,16 +77,18 @@ def run_analyze():
         keywords_to_analyze = request.form.get('keywords', '', type=str).split(',')
         # List comprehension using a for loop
         keywords_to_analyze = [keyword.strip() for keyword in keywords_to_analyze if keyword.strip()]
-        print(keywords_to_analyze)
         if not keywords_to_analyze:
             raise ValueError('No keywords provided.')
+        # Call the image processor
+        imageprocessor()
+        # Call analyzer
+        analyzer = ImageAnalyzer()
+        analyzer.analyze_images(
+            analysed_dir=app.config["DOWNLOADS_DIR"],
+            keywords=keywords_to_analyze
+        )
     except ValueError as e:
         logger.error(f' * Input error: {e}')
-
-    # Placeholder for analyze function analyze(url_to_scrape)
-    logger.info(f' * Analyzing...')
-    logger.info(f' * Analyzed.')
-    logger.info(' * Images saved to analyzed and saved to folders.')
 
     # Reload index after keywords are sent
     return redirect(url_for('index'))
