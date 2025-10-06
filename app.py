@@ -1,11 +1,11 @@
 import os
 import logging
 from config import DevConfig, ProdConfig
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from modules.analyzer.analyzer import ImageAnalyzer
 from modules.utils.imageutil import imageprocessor
 
-## FLYTTA UT KODEN NEDAN TILL UTILS ELLER ANALYZER
+# MOVE THIS OUT TO UTILS OR ANALYZER
 from huggingface_hub import snapshot_download
 
 model_dir = "modules/analyzer/models/vit-base-patch16-224"
@@ -41,11 +41,37 @@ def dir_to_list(dir: str) -> list:
         return []
     return os.listdir(dir)
 
+# Get sub folders paths and category names
+def get_files_by_category(folder):
+    category_list = []
+    # Get the folder path and folder name for folder and each subfolder
+    for folder_path in os.walk(folder):
+        dir_path = folder_path[0]
+        files_path = sorted(folder_path[2])
+        category_name = os.path.basename(os.path.normpath(dir_path))
+        # Get all files in this subfolder
+        files = [os.path.join(category_name, item) for item in files_path]
+        category = dict(
+            path=dir_path,
+            # Get the name from the last part of the path, normalized to work across different OS
+            name= category_name,
+            # Add the files list so the template doesn't need os.listdir
+            files=files
+        )
+        category_list.append(category)
+
+    # Remove the root folder from list if list is not empty
+    if category_list:
+        category_list.pop(0)
+
+    return category_list
+
 # Route to index function, loads file names from downloads folder
 @app.route('/', methods=['GET'])
 def index():
     downloads = dir_to_list(app.config["DOWNLOADS_DIR"])
-    return render_template('index.html', downloads=downloads)
+    categories = get_files_by_category(app.config["ANALYZED_DIR"])
+    return render_template('index.html', downloads=downloads, categories=categories)
 
 # Route to post url input by the user, sent to scrape
 @app.route('/scrape_form', methods=['POST'])
@@ -93,6 +119,15 @@ def run_analyze():
     # Reload index after keywords are sent
     return redirect(url_for('index'))
 
+# Serve files from downloads directory to website
+@app.route("/downloads/<path:filename>")
+def downloaded_image(filename):
+    return send_from_directory(app.config["DOWNLOADS_DIR"], filename)
+
+# Serve files from analyzed directory to website
+@app.route("/data/analyzed/<path:filename>")
+def analyzed_image(filename):
+    return send_from_directory(app.config["ANALYZED_DIR"], filename)
 
 if __name__ == '__main__':
     # Set if True if Development or False if Production (Production env not implemented)
@@ -114,11 +149,21 @@ if __name__ == '__main__':
     # Get debug based on config
     debug = bool(app.config.get("DEBUG", USE_DEV))
 
+    class App_Run_Config():
+        def __init__(self, host, port, debug, use_reloader, threaded):
+            self.host = host
+            self.port = port
+            self.debug = debug
+            self.use_reloader = use_reloader
+            self.threaded = threaded
+
+    dev_app_run_config = App_Run_Config(host='127.0.0.1' if debug else '0.0.0.0', port=8000, debug=debug, use_reloader=debug, threaded=True)
+
     # Note that production is not implemented
     app.run(
-        host="127.0.0.1" if debug else "0.0.0.0",
-        port=8000,
-        debug=debug,
-        use_reloader=debug,
-        threaded=True,
+        host=dev_app_run_config.host,
+        port=dev_app_run_config.port,
+        debug=dev_app_run_config.debug,
+        use_reloader=dev_app_run_config.use_reloader,
+        threaded=dev_app_run_config.threaded,
     )
