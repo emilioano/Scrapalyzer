@@ -87,6 +87,7 @@ h1, h2 { margin: 0 0 12px; }
     list-style: none;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: var(--gap);
+  text-align: center;
 }
 
 .grid img {

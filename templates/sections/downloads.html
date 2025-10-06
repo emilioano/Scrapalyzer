@@ -1,14 +1,14 @@
 <section class="card">
-	<h2 class="title">Downloads</h2>
-	<ul class="grid">
-		{% for item in downloads %}
-		<li>
-			<img
-				src="{{ url_for('downloaded_image', filename=item) }}"
-				alt="{{ item }}" class="image" />
-		</li>
-		{% else %}
-		<li>No items yet.</li>
-		{% endfor %}
-	</ul>
+  <h2 class="title">Downloads</h2>
+  {% if downloads %}
+    <ul class="grid">
+      {% for download in downloads %}
+        <li>
+          <img src="{{ url_for('downloaded_image', filename=download) }}" alt="{{ download }}" class="image" />
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No analyzed images yet.</p>
+  {% endif %}
 </section>

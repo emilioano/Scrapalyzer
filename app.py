@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 from modules.analyzer.analyzer import ImageAnalyzer
 from modules.utils.imageutil import imageprocessor
 
-# FLYTTA UT KODEN NEDAN TILL UTILS ELLER ANALYZER
+# MOVE THIS OUT TO UTILS OR ANALYZER
 from huggingface_hub import snapshot_download
 
 model_dir = "modules/analyzer/models/vit-base-patch16-224"
