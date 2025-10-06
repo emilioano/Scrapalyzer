@@ -149,11 +149,21 @@ if __name__ == '__main__':
     # Get debug based on config
     debug = bool(app.config.get("DEBUG", USE_DEV))
 
+    class App_Run_Config():
+        def __init__(self, host, port, debug, use_reloader, threaded):
+            self.host = host
+            self.port = port
+            self.debug = debug
+            self.use_reloader = use_reloader
+            self.threaded = threaded
+
+    dev_app_run_config = App_Run_Config(host='127.0.0.1' if debug else '0.0.0.0', port=8000, debug=debug, use_reloader=debug, threaded=True)
+
     # Note that production is not implemented
     app.run(
-        host="127.0.0.1" if debug else "0.0.0.0",
-        port=8000,
-        debug=debug,
-        use_reloader=debug,
-        threaded=True,
+        host=dev_app_run_config.host,
+        port=dev_app_run_config.port,
+        debug=dev_app_run_config.debug,
+        use_reloader=dev_app_run_config.use_reloader,
+        threaded=dev_app_run_config.threaded,
     )
