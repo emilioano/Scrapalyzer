@@ -26,6 +26,14 @@ class Scraper:
 
 #Function for extracting image
   def extract_image(self):
+    allowed_formats = ['.jpg', '.jpeg', '.png', '.webp']
+    for link in self.urls:
+       if any(fmt in link for fmt in allowed_formats):
+          self.extracted.append(link)
+
+
+
+
      
     
 
