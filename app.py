@@ -1,4 +1,5 @@
 import os
+import posixpath
 import logging
 from config import DevConfig, ProdConfig
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
@@ -50,7 +51,7 @@ def get_files_by_category(folder):
         files_path = sorted(folder_path[2])
         category_name = os.path.basename(os.path.normpath(dir_path))
         # Get all files in this subfolder
-        files = [os.path.join(category_name, item) for item in files_path]
+        files = [posixpath.join(category_name, item) for item in files_path]
         category = dict(
             path=dir_path,
             # Get the name from the last part of the path, normalized to work across different OS
@@ -107,7 +108,7 @@ def run_analyze():
             raise ValueError('No keywords provided.')
         # Call the image processor
         imageprocessor()
-        # Call analyzer
+        # Call analyzer on the processed images
         analyzer = ImageAnalyzer()
         analyzer.analyze_images(
             analysed_dir=app.config["PROCESSED_DIR"],
