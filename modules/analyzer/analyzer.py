@@ -105,7 +105,7 @@ class ImageAnalyzer:
 
         for filename in os.listdir(analysed_dir):
             print(f'Filename: {filename}')
-            if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+            if filename.lower().endswith(('.png', '.jpg', '.jpeg','.webp')):
                 image_path = os.path.join(analysed_dir, filename)
                 print(f'Image path: {image_path}')
                 result = self.classify_image(image_path)
