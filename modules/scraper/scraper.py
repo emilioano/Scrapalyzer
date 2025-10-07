@@ -66,10 +66,7 @@ class Scraper:
         parsed_url = urlparse(link)
         response = requests.get(link, timeout=100, verify=False, headers=headers)
         filename = os.path.basename(parsed_url.path)
-
         save_path = os.path.join('data/downloads', filename)
-
-        
         #If the response is successful, we save the image to the specified path
         if response.status_code == 200:
            image = Image.open(BytesIO(response.content))
