@@ -1,3 +1,25 @@
 <section class="card">
 	<h2 class="title">Analyze</h2>
+	<form
+		class="form"
+		action="{{ url_for('run_analyze') }}"
+		method="post">
+		<label
+			class="input_label"
+			for="keywords"
+			>Keywords to find. <br> (Enter several by comma seperating the words)</label
+		>
+		<input
+			id="keywords"
+			class="form_input"
+			type="text"
+			name="keywords"
+			placeholder="cat, dog, train, cloud"
+			required />
+		<button
+			class="submit_button"
+			type="submit">
+			analyze
+		</button>
+	</form>
 </section>
