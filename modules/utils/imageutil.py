@@ -10,6 +10,7 @@ from torchvision.models.detection.mask_rcnn import MaskRCNN_ResNet50_FPN_Weights
 from torchvision.transforms import functional as F
 
 
+
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -26,7 +27,7 @@ size = 512
 def imagedownloader(url,id=None):
     file_name=os.path.basename(url)
     weburl=requests.get(url, verify=False)
-    if file_name.endswith(('.jpg','.png','.jpeg')):
+    if file_name.endswith(('.jpg','.png','.jpeg','webp')):
         try:
             with open(os.path.join(download_folder, file_name), 'wb') as save:
                 save.write(weburl.content)
@@ -75,21 +76,21 @@ def imageprocessor(id=None):
                 mask = prediction["masks"][i, 0].cpu().numpy()
                 mask_binary = mask > 0.5                
         
-            # Creating new image with segmentet object only
-            object = np.zeros_like(image_rgb)
-            object[mask_binary] = image_rgb[mask_binary]
+                 # Creating new image with segmentet object only
+                object = np.zeros_like(image_rgb)
+                object[mask_binary] = image_rgb[mask_binary]
 
-            # Cropping object to its bounding box
-            y_indices, x_indices = np.where(mask_binary)
-            if y_indices.size > 0 and x_indices.size > 0:
-                y_min, y_max = y_indices.min(), y_indices.max()
-                x_min, x_max = x_indices.min(), x_indices.max()
-                object_crop = object[y_min:y_max+1, x_min:x_max+1]
-                object_width = x_max-x_min
-                object_height = y_max-y_min
-                print(f'Object {object_counter}. Height: {object_height}. y_min: {y_min}, y_max: {y_max}')
-                print(f'Object {object_counter}. Width: {object_width}. y_min: {x_min}, y_max: {x_max}')
-
+                # Cropping object to its bounding box
+                y_indices, x_indices = np.where(mask_binary)
+                if y_indices.size > 0 and x_indices.size > 0:
+                    y_min, y_max = y_indices.min(), y_indices.max()
+                    x_min, x_max = x_indices.min(), x_indices.max()
+                    object_crop = object[y_min:y_max+1, x_min:x_max+1]
+                    object_width = x_max-x_min
+                    object_height = y_max-y_min
+                    print(f'Object {object_counter}. Height: {object_height}. y_min: {y_min}, y_max: {y_max}')
+                    print(f'Object {object_counter}. Width: {object_width}. y_min: {x_min}, y_max: {x_max}')
+    
                 #Save object as separate image
                 object_bgr = cv2.cvtColor(object_crop, cv2.COLOR_RGB2BGR)
 
