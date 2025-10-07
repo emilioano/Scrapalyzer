@@ -110,7 +110,7 @@ def run_analyze():
         # Call analyzer
         analyzer = ImageAnalyzer()
         analyzer.analyze_images(
-            analysed_dir=app.config["DOWNLOADS_DIR"],
+            analysed_dir=app.config["PROCESSED_DIR"],
             keywords=keywords_to_analyze
         )
     except ValueError as e:
