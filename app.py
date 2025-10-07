@@ -1,6 +1,8 @@
 import os
 import posixpath
 import logging
+from urllib.parse import urljoin, urlparse
+from modules.scraper.scraper import Scraper
 from config import DevConfig, ProdConfig
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from modules.analyzer.analyzer import ImageAnalyzer
@@ -87,11 +89,24 @@ def scrape_form():
     # Placeholder error handling
     except ValueError as e:
         logger.error(f' * Input error: {e}')
+        return redirect(url_for('index'))
 
-    # Placeholder for scraping function scrape(url_to_scrape)
-    logger.info(f' * Scraping: {url_to_scrape}')
-    logger.info(f' * Scraped: {url_to_scrape}')
-    logger.info(' * Images saved to downloads folder.')
+    # Run the scraper
+    scraper = Scraper(url_to_scrape)
+    scraper.fetch_image()
+    # Join urls
+    scraper.urls = [urljoin(url_to_scrape, u) for u in scraper.urls if u]
+    # Filter out unwanted urls
+    scraper.urls = [
+        u for u in scraper.urls
+        if urlparse(u).scheme in ('http', 'https')
+    ]
+    # Call functions to extract and scrape images
+    scraper.extract_image()
+    scraper.save_image()
+
+    logger.info(f"Saved {len(scraper.extracted)} images.")
+
 
     # Reload index after url is sent
     return redirect(url_for('index'))

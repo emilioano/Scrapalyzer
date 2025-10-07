@@ -84,10 +84,18 @@ h1, h2 { margin: 0 0 12px; }
 /* Gallery */
 .grid {
   display: grid;
-    list-style: none;
+  list-style: none;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: var(--gap);
   text-align: center;
+}
+
+.grid li {
+  text-align: center;
+}
+
+.grid li:only-child {
+  grid-column: 1 / -1;
 }
 
 .grid img {
