@@ -6,6 +6,20 @@ import requests
 from bs4 import BeautifulSoup
 from PIL import Image
 
+from urllib.parse import urlparse
+
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0 Safari/537.36",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Referer": "https://www.google.com",
+    "Connection": "keep-alive"
+}
+
+
 #Class for the scraper function
 class Scraper:
   #The constructor for the whole program
@@ -17,7 +31,7 @@ class Scraper:
 #Function for fetching images from given URL
   def fetch_image(self):
      #Assigning values to variables so its easier to use bs4
-     page = requests.get(self.url)
+     page = requests.get(self.url,verify=False,headers=headers)
      soup = BeautifulSoup(page.text,"html.parser")
      images = soup.find_all('img')
      #Going through every img tag, grabbing its 'src' and adding it to my self.urls list
@@ -49,9 +63,13 @@ class Scraper:
        print('Failed to create directory!')
     #Looping through each link, adding different file-numbers for each file and also IF the specific url is too slow then it skips it
     for link in self.extracted:
-        response = requests.get(link, timeout=10)
-        filename = link.split('/') [-1]
+        parsed_url = urlparse(link)
+        response = requests.get(link, timeout=100, verify=False, headers=headers)
+        filename = os.path.basename(parsed_url.path)
+
         save_path = os.path.join('data/downloads', filename)
+
+        
         #If the response is successful, we save the image to the specified path
         if response.status_code == 200:
            image = Image.open(BytesIO(response.content))
