@@ -60,10 +60,10 @@ class Scraper:
         else:
            continue
            
-   def run(self, url_to_scrape):
+   def run(self):
       self.fetch_image()
     # Join urls
-      self.urls = [urljoin(url_to_scrape, u) for u in self.urls if u]
+      self.urls = [urljoin(self.url, u) for u in self.urls if u]
     # Filter out unwanted urls
       self.urls = [
         u for u in self.urls

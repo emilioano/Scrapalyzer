@@ -1,7 +1,6 @@
 import os
 import posixpath
 import logging
-from urllib.parse import urljoin, urlparse
 from modules.scraper.scraper import Scraper
 from config import DevConfig, ProdConfig
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
@@ -93,20 +92,7 @@ def scrape_form():
 
     # Run the scraper
     scraper = Scraper(url_to_scrape)
-    scraper.fetch_image()
-    # Join urls
-    scraper.urls = [urljoin(url_to_scrape, u) for u in scraper.urls if u]
-    # Filter out unwanted urls
-    scraper.urls = [
-        u for u in scraper.urls
-        if urlparse(u).scheme in ('http', 'https')
-    ]
-    # Call functions to extract and scrape images
-    scraper.extract_image()
-    scraper.save_image()
-
-    logger.info(f"Saved {len(scraper.extracted)} images.")
-
+    scraper.run()
 
     # Reload index after url is sent
     return redirect(url_for('index'))
