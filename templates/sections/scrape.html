@@ -1,6 +1,15 @@
 <section class="card">
-	<h2 class="title">Scrape</h2>
+	<div class="card_header">
+		<h2 class="title">Scrape</h2>
+		<button
+			id="clear-scrape-btn"
+			class="clear_button"
+			type="submit">
+			clear folder
+		</button>
+	</div>
 	<form
+		id="scrape-form"
 		class="form"
 		action="{{ url_for('scrape_form') }}"
 		method="post">
@@ -16,6 +25,21 @@
 			name="url"
 			placeholder="https://example.com/img"
 			required />
-		<button class="submit_button">scrape</button>
+		<button
+			id="scrape-btn"
+			class="submit_button">
+			scrape
+		</button>
 	</form>
 </section>
+
+<script>
+	document.addEventListener("DOMContentLoaded", () => {
+		const scrape_form = document.getElementById("scrape-form");
+		const keywords_btn = document.getElementById("scrape-btn");
+		scrape_form.addEventListener("submit", () => {
+			keywords_btn.disabled = true;
+			keywords_btn.textContent = "scraping...";
+		});
+	});
+</script>
