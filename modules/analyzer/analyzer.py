@@ -11,7 +11,7 @@ import torch
 analyzed_path = 'data/analyzed/'
 os.makedirs(analyzed_path, exist_ok=True)
 
-nomatch_path = 'data/analyzed/nomatch/'
+nomatch_path = 'data/analyzed/zero_matches/'
 
 
 
