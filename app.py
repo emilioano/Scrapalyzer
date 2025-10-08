@@ -23,7 +23,7 @@ if not all(os.path.exists(os.path.join(model_dir, f)) for f in needed_files):
 app = Flask(__name__)
 logger = logging.getLogger(__name__)
 
-# Ensure downloads directory exists
+# Ensure directory exists
 def ensure_folder(folders: str | list) -> None:
     if isinstance(folders, str):
         folders = [folders]
