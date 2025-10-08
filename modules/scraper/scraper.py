@@ -1,21 +1,22 @@
+from urllib.parse import urljoin, urlparse
 import os
-from pathlib import Path
 from io import BytesIO
 
 import requests
 from bs4 import BeautifulSoup
 from PIL import Image
 
+
 #Class for the scraper function
 class Scraper:
-  #The constructor for the whole program
-  def __init__(self, url):
+   def __init__(self, url):
       self.url = url
       self.urls = []
       self.extracted = []
+
     
 #Function for fetching images from given URL
-  def fetch_image(self):
+   def fetch_image(self):
      #Assigning values to variables so its easier to use bs4
      page = requests.get(self.url)
      soup = BeautifulSoup(page.text,"html.parser")
@@ -28,7 +29,7 @@ class Scraper:
 
 
 #Function for extracting image
-  def extract_image(self):
+   def extract_image(self):
     #Setting a variable so it filters out bad links/urls
     allowed_formats = ['.jpg', '.jpeg', '.png', '.webp']
     for link in self.urls:
@@ -39,7 +40,7 @@ class Scraper:
 
 
 #Function for saving image to /
-  def save_image(self):
+   def save_image(self):
     try:
        #Created the directory and if it already exists then, OK!
        os.makedirs('data/downloads', exist_ok=True)
@@ -58,3 +59,16 @@ class Scraper:
            image.save(save_path)
         else:
            continue
+           
+   def run(self, url_to_scrape):
+      self.fetch_image()
+    # Join urls
+      self.urls = [urljoin(url_to_scrape, u) for u in self.urls if u]
+    # Filter out unwanted urls
+      self.urls = [
+        u for u in self.urls
+        if urlparse(u).scheme in ('http', 'https')
+      ] 
+    # Call functions to extract and scrape images
+      self.extract_image()
+      self.save_image()
