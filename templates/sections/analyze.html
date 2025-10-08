@@ -1,13 +1,24 @@
 <section class="card">
-	<h2 class="title">Analyze</h2>
+	<div class="card_header">
+		<h2 class="title">Analyze</h2>
+		<button
+			id="clear-analyze-btn"
+			class="clear_button"
+			type="submit">
+			clear folder
+		</button>
+	</div>
+
 	<form
+		id="analyze-form"
 		class="form"
 		action="{{ url_for('run_analyze') }}"
 		method="post">
 		<label
 			class="input_label"
 			for="keywords"
-			>Keywords to find. <br> (Enter several by comma seperating the words)</label
+			>Keywords to find <br />
+			(Enter several by comma seperating the words)</label
 		>
 		<input
 			id="keywords"
@@ -17,9 +28,21 @@
 			placeholder="cat, dog, train, cloud"
 			required />
 		<button
+			id="analyze-btn"
 			class="submit_button"
 			type="submit">
 			analyze
 		</button>
 	</form>
 </section>
+
+<script>
+	document.addEventListener("DOMContentLoaded", () => {
+		const analyze_form = document.getElementById("analyze-form");
+		const analyze_btn = document.getElementById("analyze-btn");
+		analyze_form.addEventListener("submit", () => {
+			analyze_btn.disabled = true;
+			analyze_btn.textContent = "analyzing...";
+		});
+	});
+</script>
