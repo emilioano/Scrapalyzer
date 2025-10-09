@@ -2,7 +2,7 @@
 
 Scrapalyzer is a Python group project where we scrape images, process them, classify them with AI and display the result in a web interface
 
-This project is a Python course group assignment . AI developer Jensen Yrkeshögskola.
+This project is a group assignment at AI developer Jensen Yrkeshögskola.
 
 
 -------------------
@@ -15,9 +15,9 @@ Scraper fetches image links (filters by pixels)
 
 Image utilities download and preprocess images
 
-Analyzer classifies processed images (cats/dogs)
+Analyzer classifies processed images ({keyword}) 
 
-Web front lists results in different columns
+Web front lists results in different sections
 
 -------------------
 
@@ -54,7 +54,7 @@ Image utilities - Emil
 [ Robin - Classifier ]
        |
        v
- (classification -> data/analysed/cats, dogs)
+ (classification -> data/analyzed/{keyword})
        |
        v
 [ Viktor - Web/Flask ]
@@ -62,13 +62,15 @@ Image utilities - Emil
        v
  (displays results in web page via templates/)
 
+ {keyword} indicates a dynamically generated folder based on the classification result.
+
 ```
 
 -------------------
 
 ## Installation & Setup
 
-git clone git@github.com:emilioano/Scrapalyzer.git / https://github.com/emilioano/Scrapalyzer.git (SSH / HTTPS)
+git clone git@github.com:emilioano/Scrapalyzer.git   /   https://github.com/emilioano/Scrapalyzer.git (SSH / HTTPS)
 
 cd Scrapalyzer
 
@@ -82,22 +84,41 @@ pip install -r requirements.txt
 
 ## Project Structure
 
-
 ```plaintext
 Scrapalyzer/
 ├── app.py
-├── services/
+├── config.py
+├── modules/
+│   ├── analyzer/
+│   │   ├── __init__.py
+│   │   ├── analyzer_test.py
+│   │   └── classifier.py
 │   ├── scraper/
 │   │   └── scraper.py
-│   ├── analyzer/
-│   │   └── classifier.py
 │   └── utils/
-│       └── image_utils.py
+│       ├── __init__.py
+│       └── imageutil.py
 ├── data/
-│   ├── downloads/
-│   ├── processed/
-│   └── analyzed/
-├── templates/
+|   ├── downloads/
+|   ├── processed/
+|   └── analyzed/
 ├── static/
-└── requirements.txt
+│   └── css/
+│       └── styles.css
+├── templates/
+│   ├── sections/
+│   ├── analyze.html
+│   ├── downloads.html
+│   ├── results.html
+│   └── scrape.html
+│
+├── base.html
+├── index.html
+├── venv/
+├── .gitignore
+├── config.py
+├── requirements.txt
+├── tests/
+|   └── test_app.py
+└── README.md
 ```
