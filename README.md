@@ -17,7 +17,7 @@ Image utilities download and preprocess images
 
 Analyzer classifies processed images ({keyword}) 
 
-Web front lists results in different columns
+Web front lists results in different sections
 
 -------------------
 
@@ -62,7 +62,7 @@ Image utilities - Emil
        v
  (displays results in web page via templates/)
 
- **{keyword}**  indicates a dynamically generated folder based on the classification result.
+ {keyword} indicates a dynamically generated folder based on the classification result.
 
 ```
 
@@ -116,8 +116,9 @@ Scrapalyzer/
 ├── index.html
 ├── venv/
 ├── .gitignore
+├── config.py
 ├── requirements.txt
-├── test_app.py
-├── util_and_analyzer_flow.py
+├── tests/
+|   └── test_app.py
 └── README.md
 ```
