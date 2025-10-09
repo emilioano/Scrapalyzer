@@ -32,10 +32,21 @@ class Scraper:
    def extract_image(self):
     #Setting a variable so it filters out bad links/urls
     allowed_formats = ['.jpg', '.jpeg', '.png', '.webp']
+    #'urljoin' guarantees that every URL becomes a valid URL (it adds missing protocol)
+    self.urls = [urljoin(self.url, u) for u in self.urls if u]
+    #Filter out unwanted urls, 'scheme' extracts just the scheme part ('https', 'https')
+    self.urls = [
+        u for u in self.urls
+        if urlparse(u).scheme in ('http', 'https')
+      ]    
+    #Just to make sure list is clear before appending to avoid duplicates
+    self.extracted.clear()
     for link in self.urls:
-       #If the link contains the allowed format then its appended to the self.extracted list
-       if any(fmt in link for fmt in allowed_formats):
+       #If the link contains the allowed format then its appended to the self.extracted list, .lower prevents the function from missing .JPG uppercases
+       if any(fmt in link.lower() for fmt in allowed_formats):
           self.extracted.append(link)
+
+          
     
 
 
@@ -59,16 +70,8 @@ class Scraper:
            image.save(save_path)
         else:
            continue
-           
+   #Run function        
    def run(self):
       self.fetch_image()
-    # Join urls
-      self.urls = [urljoin(self.url, u) for u in self.urls if u]
-    # Filter out unwanted urls
-      self.urls = [
-        u for u in self.urls
-        if urlparse(u).scheme in ('http', 'https')
-      ] 
-    # Call functions to extract and scrape images
       self.extract_image()
       self.save_image()
