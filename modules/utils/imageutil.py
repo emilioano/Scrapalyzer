@@ -1,27 +1,97 @@
+# Libraries to handle files and images.
 import os
 import requests
 import cv2
 
+# Libraries in use in relation to Mask R-CNN.
 import torch
 import numpy as np
-
 from torchvision.models.detection import maskrcnn_resnet50_fpn
 from torchvision.models.detection.mask_rcnn import MaskRCNN_ResNet50_FPN_Weights
 from torchvision.transforms import functional as F
 
-
-
+# Library to disable certificate warning, for Emil only.
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+# For classes
+from abc import ABC, abstractmethod
 
+# Set where imagedownloader puts files.
 download_folder='data/downloads/'
 os.makedirs(download_folder, exist_ok=True)
 
+# Set where imageprocessor puts processed files.
 processed_folder='data/processed/'
 os.makedirs(processed_folder, exist_ok=True)
 
+# Set the max pixel size for saved object images. Pictures larger will be rezised to this, both width and height is considered.
 size = 512
+
+# Set the minimum object image pixel size that will be considered for further processing. Both width and height considered. 
+min_size = 100
+
+
+class ImageCleaner:
+    def __init__(self, cleanfolder, recursive, dryrun):
+        self.cleanfolder = cleanfolder
+        self.recursive = recursive
+        self.dryrun = dryrun
+
+    def wipefolder(self):
+        if self.recursive:
+            print(f'Wiping folder with recursive mode set as {self.recursive}. And dryrun mode set as {self.dryrun}')
+            # List all subfolders
+            for root, dirs, files in os.walk(self.cleanfolder):
+
+                # Get all files in the and remove them
+                for filename in files:
+                    full_path=os.path.join(root, filename)
+                    try:
+                        if self.dryrun:
+                            print(f'** Dry run ** Removed {full_path}')
+                        else:
+                            os.remove(full_path)
+                            print(f'Removed {full_path}')
+
+                    except Exception as error:
+                        print(f'Error when removing file: {error}')
+
+            # When the folders are empty we are allowed to remove them, so let's do that
+            for dirs in os.walk(self.cleanfolder):
+                # Below to not include the root folder for deletion.
+                if dirs[0] != self.cleanfolder:
+                    try:        
+                        if self.dryrun:
+                            print(f'** Dry run ** Removed folder {dirs[0]}')
+                        else:
+                            os.rmdir(folder[0])
+                            print(f'** Dry run ** Removed folder {dirs[0]}')
+                    except Exception as error:
+                        print(f'Unable to remove folder: {error}')
+        
+        elif not self.recursive:
+            print(f'Wiping folder with recursive mode set as {self.recursive}. And dryrun mode set as {self.dryrun}')
+            for filename in os.listdir(self.cleanfolder):
+                full_path=os.path.join(self.cleanfolder, filename)               
+                try:
+                    #Skip subsfolders
+                    if os.path.isdir(full_path):
+                        continue
+                    else:
+                        if self.dryrun:
+                            print(f'** Dry run** Removed {full_path}')
+                        else:
+                            os.remove(full_path)
+                            print(f'** Dry run** Removed {full_path}')
+                except Exception as error:
+                    print(f'Error when removing file: {error}')
+
+
+
+
+
+
 
 
 def imagedownloader(url,id=None):
