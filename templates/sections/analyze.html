@@ -42,6 +42,22 @@
 			analyze
 		</button>
 	</form>
+	<div class="card_header">
+	<form 
+		style="border: 0px"
+		id="analyze-all-form"
+		class="form_input"
+		action="{{ url_for('run_analyze') }}"
+		method="post">
+		<button 
+			id="analyze_btn"
+			type="Submit" 
+			class="submit_button"
+			type="submit">
+			Classify all possible
+		</button>
+	</form>
+	</div>
 </section>
 
 <script>

@@ -3,7 +3,6 @@ import logging
 
 # Libraries to handle files and images.
 import os
-import requests
 import cv2
 
 # Libraries in use in relation to Mask R-CNN.
@@ -32,7 +31,7 @@ os.makedirs(processed_folder, exist_ok=True)
 size = 512
 
 # Set the minimum object image pixel size that will be considered for further processing. Both width and height considered. 
-min_size = 100
+min_size = 150
 
 def imageprocessor(id=None):
 
@@ -94,6 +93,9 @@ def imageprocessor(id=None):
                 else:
                     full_processed_path = processed_folder+id+'_'+'object_'+str(object_counter)+'_'+file
 
+
+
+
                 #Resize the image in case it's larger than predefined size in pixels
                 if object_width > size or object_height > size:
                     if object_width >= object_height:
@@ -108,7 +110,12 @@ def imageprocessor(id=None):
                 else:
                     object_resized=object_bgr
 
-                save = cv2.imwrite(full_processed_path,object_resized)
+                # Only save object images that are larger than the decided threshold
+                if object_resized.shape[0] > min_size and object_resized.shape[0] > min_size:
+                    save = cv2.imwrite(full_processed_path,object_resized)
+                else:
+                    logger.info(f'Object {object_counter}. Detected image with width or height smaller than {min_size} pixels. Not saving it.')
+                    continue
 
                 if save:
                     logger.info(f'Object {object_counter}. Image {full_processed_path} saved')

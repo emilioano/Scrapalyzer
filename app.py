@@ -119,8 +119,8 @@ def run_analyze():
         keywords_to_analyze = request.form.get('keywords', '', type=str).split(',')
         # List comprehension using a for loop
         keywords_to_analyze = [keyword.strip() for keyword in keywords_to_analyze if keyword.strip()]
-        if not keywords_to_analyze:
-            raise ValueError('No keywords provided.')
+        #if not keywords_to_analyze:
+            #raise ValueError('No keywords provided.')
         # Call the image processor
         imageprocessor()
         # Call analyzer on the processed images
