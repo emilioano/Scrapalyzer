@@ -1,13 +1,21 @@
 <section class="card">
 	<div class="card_header">
 		<h2 class="title">Analyze</h2>
-		<button
-			id="clear-analyze-btn"
+		<form 
+		id="clear-analyzed-form"
+		class="clear_form"
+		action="{{ url_for('clear_analyzed_button') }}"
+		method='post'>
+		<button 
+			type="Submit" 
 			class="clear_button"
-			type="submit">
+			id="clear-scrape-btn"
+			onclick="alert('This will wipe the folder, continue?')">
 			clear folder
 		</button>
+	</form>
 	</div>
+
 
 	<form
 		id="analyze-form"
