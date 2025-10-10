@@ -6,6 +6,7 @@ from config import DevConfig, ProdConfig
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from modules.analyzer.analyzer import ImageAnalyzer
 from modules.utils.imageutil import imageprocessor
+from modules.utils.imageremover import imageremover,RecursiveCleaner,FlatCleaner
 
 # MOVE THIS OUT TO UTILS OR ANALYZER
 from huggingface_hub import snapshot_download
@@ -84,7 +85,7 @@ def scrape_form():
             raise ValueError('No URL provided')
         if not url_to_scrape.startswith(("http://", "https://")):
             raise ValueError("Invalid URL")
-        
+
     # Placeholder error handling
     except ValueError as e:
         logger.error(f' * Input error: {e}')
@@ -95,6 +96,19 @@ def scrape_form():
     scraper.run()
 
     # Reload index after url is sent
+    return redirect(url_for('index'))
+
+# Route to clear downloads folder
+@app.route('/clear_downloads_button', methods=['POST'])
+def clear_downloads_button():
+    try:
+        #(path, dryrun mode)
+        flatcleaner = FlatCleaner('data/downloads/',False)
+        imageremover(flatcleaner)
+    except Exception as error:
+        logger.error(f'Error when clearing files: {error}')
+
+    # Reload index after button is triggered    
     return redirect(url_for('index'))
 
 # Route to run the analyze script
@@ -120,6 +134,20 @@ def run_analyze():
 
     # Reload index after keywords are sent
     return redirect(url_for('index'))
+
+# Route to clear analyzed folder recursively
+@app.route('/clear_analyzed_button', methods=['POST'])
+def clear_analyzed_button():
+    try:
+        #(path, dryrun mode)
+        recursivecleaner = RecursiveCleaner('data/analyzed/',False)
+        imageremover(recursivecleaner)
+    except Exception as error:
+        logger.error(f'Error when clearing files: {error}')
+
+    # Reload index after button is triggered    
+    return redirect(url_for('index'))
+
 
 # Serve files from downloads directory to website
 @app.route("/downloads/<path:filename>")
