@@ -39,7 +39,7 @@ class RecursiveCleaner(ImageRemover):
                         logger.info(f'** Dry run ** Removed folder {dirs[0]}')
                     else:
                         os.rmdir(dirs[0])
-                        logger.info(f'** Dry run ** Removed folder {dirs[0]}')
+                        logger.info(f'**Removed folder {dirs[0]}')
                 except Exception as error:
                     logger.info(f'Unable to remove folder: {error}')
 
@@ -57,7 +57,7 @@ class FlatCleaner(ImageRemover):
                         logger.info(f'** Dry run** Removed {full_path}')
                     else:
                         os.remove(full_path)
-                        logger.info(f'** Dry run** Removed {full_path}')
+                        logger.info(f'Removed {full_path}')
             except Exception as error:
                 logger.error(f'Error when removing file: {error}')
 
