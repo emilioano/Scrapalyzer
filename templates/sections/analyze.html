@@ -54,5 +54,11 @@
 			analyze_btn.disabled = true;
 			analyze_btn.textContent = "analyzing...";
 		});
+		const analyze_all_form = document.getElementById("analyze-all-form");
+		const analyze_all_btn = document.getElementById("analyze-all-btn");
+		analyze_all_form.addEventListener("submit", () => {
+			analyze_all_btn.disabled = true;
+			analyze_all_btn.textContent = "analyzing...";
+		});
 	});
 </script>

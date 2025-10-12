@@ -38,6 +38,7 @@ h1,
 h2 {
 	margin: 0 0 12px;
 }
+
 .title {
 	color: var(--accent);
 }
@@ -136,6 +137,24 @@ h2 {
 	transition: background 0.2s ease, transform 0.1s ease, opacity 0.2s ease;
 }
 
+.submit_all_button:hover:not(:disabled) {
+	background: var(--accent-hover, #005fcc);
+}
+
+.submit_all_button:disabled {
+	background: #aaa;
+	color: #eee;
+	cursor: not-allowed;
+	opacity: 0.7;
+	transform: none;
+}
+
+.submit_all_button:focus {
+	outline: 2px solid rgba(0, 136, 204, 0.3);
+	outline-offset: 2px;
+	transition: outline 0.15s ease-in-out;
+}
+
 /* Clear button */
 .clear_button {
 	position: absolute;
@@ -147,7 +166,7 @@ h2 {
 	border-radius: 6px;
 	background: #bb3939;
 	color: #ffffff;
-	font-size:small;
+	font-size: small;
 	font-weight: 500;
 	cursor: pointer;
 	transition: background 0.2s ease, transform 0.1s ease, opacity 0.2s ease;
@@ -193,19 +212,22 @@ h2 {
 	body {
 		padding: 24px 16px;
 	}
+
 	.form {
 		flex-direction: column;
 		align-items: center;
 	}
+
 	.form_input {
 		flex-basis: auto;
 		width: 100%;
 	}
+
 	.submit_button {
 		width: auto;
 	}
 
-		.submit_all_button {
+	.submit_all_button {
 		margin-left: 0;
 	}
 
