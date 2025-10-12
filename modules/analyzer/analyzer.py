@@ -141,35 +141,4 @@ class ImageAnalyzer:
             shutil.move(os.path.join(analysed_dir, filename), os.path.join(nomatch_path, filename))
             print(f'No match for object based on keywords, moved {filename} to {nomatch_path}')
 
-            '''
-                    if "cat" in label:
-                        shutil.move(image_path, os.path.join(cats_dir, filename))
-                        print(f'Saved {cats_dir}{filename}')
-                    elif "dog" in label:
-                        shutil.move(image_path, os.path.join(dogs_dir, filename))
-                        print(f'Saved {dogs_dir}{filename}')
-                    else:
-                        result["error"] = f"Unexpected label: {result['label']}"
-            '''
         return 'Done' #result
-
-
-'''     
-if __name__ == "__main__": # type: ignore
-    analyzer = ImageAnalyzer()
-    results = analyzer.analyze_images(
-        analysed_dir="../../data/processed",
-        cats_dir="../../data/analyzed/cats",
-        dogs_dir="../../data/analyzed/dogs"
-    )
-    for result in results:
-        print(result)
-'''
-
-'''
-    analyze_images(
-        analysed_dir="../../data/processed",
-        cats_dir="../../data/cats",
-        dogs_dir="../../data/dogs"
-    )
-'''
