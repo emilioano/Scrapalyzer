@@ -73,8 +73,9 @@ class Scraper:
        print('Failed to create directory!')
     #Looping through each link, adding different file-numbers for each file and also IF the specific url is too slow then it skips it
     for link in self.extracted:
-        response = requests.get(link, timeout=100, headers=headers)
-        filename = link.split('/') [-1]
+        clean_link = link.split('?')[0]
+        response = requests.get(clean_link, timeout=100, headers=headers)
+        filename = link.split('/')[-1].split('?')[0]
         save_path = os.path.join('data/downloads', filename)
         #If the response is successful, we save the image to the specified path
         if response.status_code == 200:
