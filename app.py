@@ -6,7 +6,7 @@ from config import DevConfig, ProdConfig
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from modules.analyzer.analyzer import ImageAnalyzer
 from modules.utils.imageutil import imageprocessor
-from modules.utils.imageremover import imageremover,RecursiveCleaner,FlatCleaner
+from modules.utils.imageremover import imageremover, RecursiveCleaner, FlatCleaner
 
 # MOVE THIS OUT TO UTILS OR ANALYZER
 from huggingface_hub import snapshot_download
@@ -25,6 +25,8 @@ app = Flask(__name__)
 logger = logging.getLogger(__name__)
 
 # Ensure directory exists
+
+
 def ensure_folder(folders: str | list) -> None:
     if isinstance(folders, str):
         folders = [folders]
@@ -39,12 +41,16 @@ def ensure_folder(folders: str | list) -> None:
             raise
 
 # Simple helper function
+
+
 def dir_to_list(dir: str) -> list:
     if not os.path.exists(dir):
         return []
     return os.listdir(dir)
 
 # Get sub folders paths and category names
+
+
 def get_files_by_category(folder):
     category_list = []
     # Get the folder path and folder name for folder and each subfolder
@@ -57,7 +63,7 @@ def get_files_by_category(folder):
         category = dict(
             path=dir_path,
             # Get the name from the last part of the path, normalized to work across different OS
-            name= category_name,
+            name=category_name,
             # Add the files list so the template doesn't need os.listdir
             files=files
         )
@@ -70,6 +76,8 @@ def get_files_by_category(folder):
     return category_list
 
 # Route to index function, loads file names from downloads folder
+
+
 @app.route('/', methods=['GET'])
 def index():
     downloads = dir_to_list(app.config["DOWNLOADS_DIR"])
@@ -77,6 +85,8 @@ def index():
     return render_template('index.html', downloads=downloads, categories=categories)
 
 # Route to post url input by the user, sent to scrape
+
+
 @app.route('/scrape_form', methods=['POST'])
 def scrape_form():
     try:
@@ -98,27 +108,18 @@ def scrape_form():
     # Reload index after url is sent
     return redirect(url_for('index'))
 
-# Route to clear downloads folder
-@app.route('/clear_downloads_button', methods=['POST'])
-def clear_downloads_button():
-    try:
-        #(path, dryrun mode)
-        flatcleaner = FlatCleaner('data/downloads/',False)
-        imageremover(flatcleaner)
-    except Exception as error:
-        logger.error(f'Error when clearing files: {error}')
-
-    # Reload index after button is triggered    
-    return redirect(url_for('index'))
-
 # Route to run the analyze script
+
+
 @app.route('/run_analyze', methods=['POST'])
 def run_analyze():
     try:
         # Get the keywords from the form, split into a list using commas
-        keywords_to_analyze = request.form.get('keywords', '', type=str).split(',')
+        keywords_to_analyze = request.form.get(
+            'keywords', '', type=str).split(',')
         # List comprehension using a for loop
-        keywords_to_analyze = [keyword.strip() for keyword in keywords_to_analyze if keyword.strip()]
+        keywords_to_analyze = [keyword.strip()
+                               for keyword in keywords_to_analyze if keyword.strip()]
         if not keywords_to_analyze:
             raise ValueError('No keywords provided.')
         # Call the image processor
@@ -135,29 +136,53 @@ def run_analyze():
     # Reload index after keywords are sent
     return redirect(url_for('index'))
 
-# Route to clear analyzed folder recursively
-@app.route('/clear_analyzed_button', methods=['POST'])
-def clear_analyzed_button():
-    try:
-        #(path, dryrun mode)
-        recursivecleaner = RecursiveCleaner('data/analyzed/',False)
-        imageremover(recursivecleaner)
-    except Exception as error:
-        logger.error(f'Error when clearing files: {error}')
-
-    # Reload index after button is triggered    
+# Route to run the analyze all script
+@app.route('/run_analyze_all')
+def run_analyze_all():
+    
+    # Reload index after keywords are sent
     return redirect(url_for('index'))
 
-
 # Serve files from downloads directory to website
+
+
 @app.route("/downloads/<path:filename>")
 def downloaded_image(filename):
     return send_from_directory(app.config["DOWNLOADS_DIR"], filename)
 
 # Serve files from analyzed directory to website
+
+
 @app.route("/data/analyzed/<path:filename>")
 def analyzed_image(filename):
     return send_from_directory(app.config["ANALYZED_DIR"], filename)
+
+# Call function via route to clean the downloads folder
+
+@app.route('/clear_downloads_button')
+def clear_downloads_button():
+    try:
+        flatcleaner = FlatCleaner('data/downloads/', False)
+        imageremover(flatcleaner)
+    except Exception as error:
+        logger.error(f'Error when clearing files: {error}')
+
+    # Reload index after button is triggered
+    return redirect(url_for('index'))
+
+# Call function via route to clean the analyzed folder
+
+@app.route('/clear_analyzed_button')
+def clear_analyzed_button():
+    try:
+        recursivecleaner = RecursiveCleaner('data/analyzed/', False)
+        imageremover(recursivecleaner)
+    except Exception as error:
+        logger.error(f'Error when clearing files: {error}')
+
+    # Reload index after button is triggered
+    return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
     # Set if True if Development or False if Production (Production env not implemented)
@@ -187,7 +212,8 @@ if __name__ == '__main__':
             self.use_reloader = use_reloader
             self.threaded = threaded
 
-    dev_app_run_config = App_Run_Config(host='127.0.0.1' if debug else '0.0.0.0', port=8000, debug=debug, use_reloader=debug, threaded=True)
+    dev_app_run_config = App_Run_Config(
+        host='127.0.0.1' if debug else '0.0.0.0', port=8000, debug=debug, use_reloader=debug, threaded=True)
 
     # Note that production is not implemented
     app.run(

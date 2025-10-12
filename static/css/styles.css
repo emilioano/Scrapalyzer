@@ -91,7 +91,7 @@ h2 {
 
 .submit_button {
 	min-width: 100px;
-	max-width: 250px;
+	max-width: 150px;
 	padding: 10px 18px;
 	border: none;
 	border-radius: 6px;
@@ -121,18 +121,33 @@ h2 {
 	transition: outline 0.15s ease-in-out;
 }
 
+/* Submit all */
+.submit_all_button {
+	min-width: 100px;
+	max-width: 150px;
+	padding: 10px 18px;
+	margin-left: auto;
+	border: none;
+	border-radius: 6px;
+	background: var(--accent);
+	color: #fff;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background 0.2s ease, transform 0.1s ease, opacity 0.2s ease;
+}
+
 /* Clear button */
 .clear_button {
 	position: absolute;
 	right: 0;
-	min-width: 50px;
-	max-width: 125px;
-	padding: 5px 9px;
+	min-width: 100px;
+	max-width: 250px;
+	padding: 10px 18px;
 	border: none;
-	border-radius: 4px;
+	border-radius: 6px;
 	background: #bb3939;
 	color: #ffffff;
-	font-size: small;
+	font-size:small;
 	font-weight: 500;
 	cursor: pointer;
 	transition: background 0.2s ease, transform 0.1s ease, opacity 0.2s ease;
@@ -188,6 +203,10 @@ h2 {
 	}
 	.submit_button {
 		width: auto;
+	}
+
+		.submit_all_button {
+		margin-left: 0;
 	}
 
 	.card_header {
