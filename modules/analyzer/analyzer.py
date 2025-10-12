@@ -96,6 +96,7 @@ class ImageAnalyzer:
 
 
         results = []
+        nokeyword = False
 
         for filename in os.listdir(analysed_dir):
             print(f'Filename: {filename}')
@@ -111,7 +112,7 @@ class ImageAnalyzer:
                     label = labelraw.replace(',',' -')
                     print(f'Identification done in in {filename}, object is identified as {label}!')
                               
-
+                    
                     if not keywords:
                         keywords = [label.replace(',',' -')]
                         nokeyword = True
