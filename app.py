@@ -139,6 +139,17 @@ def run_analyze():
 # Route to run the analyze all script
 @app.route('/run_analyze_all')
 def run_analyze_all():
+
+    # Empty list to analyze all
+    keywords_to_analyze = []
+    # Call the image processor
+    imageprocessor()
+    # Call analyzer on the processed images
+    analyzer = ImageAnalyzer()
+    analyzer.analyze_images(
+        analysed_dir=app.config["PROCESSED_DIR"],
+        keywords=keywords_to_analyze
+    )
     
     # Reload index after keywords are sent
     return redirect(url_for('index'))
