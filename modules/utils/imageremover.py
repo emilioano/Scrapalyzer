@@ -1,9 +1,9 @@
-# For abstract classes
 import logging
 from abc import ABC, abstractmethod
 import os
 
 logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 class ImageRemover(ABC):
     def __init__(self, cleanfolder, dryrun):
@@ -39,7 +39,7 @@ class RecursiveCleaner(ImageRemover):
                         logger.info(f'** Dry run ** Removed folder {dirs[0]}')
                     else:
                         os.rmdir(dirs[0])
-                        logger.info(f'**Removed folder {dirs[0]}')
+                        logger.info(f'Removed folder {dirs[0]}')
                 except Exception as error:
                     logger.info(f'Unable to remove folder: {error}')
 
