@@ -136,6 +136,13 @@ def run_analyze():
     # Reload index after keywords are sent
     return redirect(url_for('index'))
 
+# Route to run the analyze all script
+@app.route('/run_analyze_all')
+def run_analyze_all():
+    
+    # Reload index after keywords are sent
+    return redirect(url_for('index'))
+
 # Serve files from downloads directory to website
 
 
@@ -151,6 +158,7 @@ def analyzed_image(filename):
     return send_from_directory(app.config["ANALYZED_DIR"], filename)
 
 # Call function via route to clean the downloads folder
+
 @app.route('/clear_downloads_button')
 def clear_downloads_button():
     try:
