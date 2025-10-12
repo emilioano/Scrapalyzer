@@ -91,13 +91,7 @@ class ImageAnalyzer:
         Returns:
             list: List of dictionaries with classification results.
         """
-        # Creating folders corresponding to keywords entered
-        #for keyword in keywords:
-        #    os.makedirs(analyzed_path+keyword, exist_ok=True)
-        #    print(f'Folder {analyzed_path}{keyword} exists or is now created!')
 
-        os.makedirs(nomatch_path, exist_ok=True)
-        print(f'Folder {nomatch_path} for no matched object exists or is now created!')
                         
 
 
@@ -113,8 +107,15 @@ class ImageAnalyzer:
                 results.append(result)
 
                 if result.get("error") is None:
-                    label = result.get("label", "").lower()
+                    labelraw = result.get("label", "").lower()
+                    label = labelraw.replace(',',' -')
                     print(f'Identification done in in {filename}, object is identified as {label}!')
+                              
+
+                    if not keywords:
+                        keywords = [label.replace(',',' -')]
+                        nokeyword = True
+                        print(f'Keyword was empty, keyword is now {keywords}')
                     
 
                     #Moving file to corresponding folder based on keyword.
@@ -122,7 +123,6 @@ class ImageAnalyzer:
                         fullpath=os.path.join(analyzed_path, keyword)
 
                         if keyword in label:
-                            
                             os.makedirs(analyzed_path+keyword, exist_ok=True)
                             print(f'Folder {analyzed_path}{keyword} exists or is now created!')
 
@@ -131,40 +131,14 @@ class ImageAnalyzer:
                         else:
                             print(f'Keyword {keyword} not found in the label: {label}')
 
+                    if nokeyword:
+                        keywords = []
+
         #Moving the files that are left to nomatch_path
         for filename in os.listdir(analysed_dir):
+            os.makedirs(nomatch_path, exist_ok=True)
+            print(f'Folder {nomatch_path} for no matched object exists or is now created!')
             shutil.move(os.path.join(analysed_dir, filename), os.path.join(nomatch_path, filename))
             print(f'No match for object based on keywords, moved {filename} to {nomatch_path}')
 
-            '''
-                    if "cat" in label:
-                        shutil.move(image_path, os.path.join(cats_dir, filename))
-                        print(f'Saved {cats_dir}{filename}')
-                    elif "dog" in label:
-                        shutil.move(image_path, os.path.join(dogs_dir, filename))
-                        print(f'Saved {dogs_dir}{filename}')
-                    else:
-                        result["error"] = f"Unexpected label: {result['label']}"
-            '''
         return 'Done' #result
-
-
-'''     
-if __name__ == "__main__": # type: ignore
-    analyzer = ImageAnalyzer()
-    results = analyzer.analyze_images(
-        analysed_dir="../../data/processed",
-        cats_dir="../../data/analyzed/cats",
-        dogs_dir="../../data/analyzed/dogs"
-    )
-    for result in results:
-        print(result)
-'''
-
-'''
-    analyze_images(
-        analysed_dir="../../data/processed",
-        cats_dir="../../data/cats",
-        dogs_dir="../../data/dogs"
-    )
-'''
