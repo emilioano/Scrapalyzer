@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 import os
 
 logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 class ImageRemover(ABC):
     def __init__(self, cleanfolder, dryrun):
