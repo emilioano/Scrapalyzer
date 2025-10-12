@@ -125,14 +125,14 @@ h2 {
 .clear_button {
 	position: absolute;
 	right: 0;
-	min-width: 50px;
-	max-width: 125px;
-	padding: 5px 9px;
+	min-width: 100px;
+	max-width: 250px;
+	padding: 10px 18px;
 	border: none;
-	border-radius: 4px;
+	border-radius: 6px;
 	background: #bb3939;
 	color: #ffffff;
-	font-size: small;
+	font-size:small;
 	font-weight: 500;
 	cursor: pointer;
 	transition: background 0.2s ease, transform 0.1s ease, opacity 0.2s ease;

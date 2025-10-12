@@ -1,5 +1,16 @@
 <section class="card">
-	<h2 class="title">Downloads</h2>
+	<form
+		class="card_header"
+		action="{{ url_for('clear_downloads_button') }}"
+		method="get">
+		<h2 class="title">Downloads</h2>
+		<button
+			id="clear-scrape-btn"
+			class="clear_button"
+			type="submit">
+			clear downloaded
+		</button>
+	</form>
 	{% if downloads %}
 	<ul class="grid">
 		{% for download in downloads %}

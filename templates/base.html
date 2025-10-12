@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0" />
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static', filename='css/styles.css') }}" />
+		<title>SCRAPALYZER</title>
+	</head>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-        <title>SCRAPALYZER</title>
-    </head>
+	<body>
+		<header>
+			<h1 class="title">SCRAPALYZER</h1>
+		</header>
 
-    <body>
-        <header>
-            <h1 class="title">SCRAPALYZER</h1>
-        </header>
-
-        <main>
-            {% block content %}{% endblock %}
-        </main>
-    </body>
-
+		<main>{% block content %}{% endblock %}</main>
+	</body>
 </html>

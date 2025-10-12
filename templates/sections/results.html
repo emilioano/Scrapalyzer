@@ -1,6 +1,16 @@
 <section class="card">
-	<h2 class="title">Results</h2>
-
+	<form
+		class="card_header"
+		action="{{ url_for('clear_analyzed_button') }}"
+		method="get">
+		<h2 class="title">Analyzed</h2>
+		<button
+			id="clear-analyzed-btn"
+			class="clear_button"
+			type="submit">
+			clear analyzed
+		</button>
+	</form>
 	{% if categories %} {% for category in categories %}
 	<div class="category-block">
 		<h3 class="subtitle">{{ category.name }}</h3>
