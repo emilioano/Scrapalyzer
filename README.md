@@ -91,12 +91,13 @@ Scrapalyzer/
 ├── modules/
 │   ├── analyzer/
 │   │   ├── __init__.py
-│   │   ├── analyzer_test.py
-│   │   └── classifier.py
+│   │   └── analyzer.py
 │   ├── scraper/
 │   │   └── scraper.py
 │   └── utils/
 │       ├── __init__.py
+|       ├── imagedownloader.py
+|       ├── imageremover.py
 │       └── imageutil.py
 ├── data/
 |   ├── downloads/
@@ -119,6 +120,8 @@ Scrapalyzer/
 ├── config.py
 ├── requirements.txt
 ├── tests/
-|   └── test_app.py
+|   ├── test_app.py
+|   ├── test_imageremover.py
+|   └── test_imageutil.py
 └── README.md
 ```
