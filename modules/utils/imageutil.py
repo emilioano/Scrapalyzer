@@ -15,10 +15,6 @@ from torchvision.models.detection import maskrcnn_resnet50_fpn
 from torchvision.models.detection.mask_rcnn import MaskRCNN_ResNet50_FPN_Weights
 from torchvision.transforms import functional as F
 
-# Library to disable certificate warning, for Emil only.
-import urllib3
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
 # Logger
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -81,7 +77,6 @@ class ProcessImages(ImageProcessor):
 
             except Exception as error:
                 logger.error(f'Error has occured: {error}')
-
 
 
             # Defining of objects in image
