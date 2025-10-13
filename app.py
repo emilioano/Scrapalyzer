@@ -5,21 +5,8 @@ from modules.scraper.scraper import Scraper
 from config import DevConfig, ProdConfig
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from modules.analyzer.analyzer import ImageAnalyzer
-from modules.utils.imageutil import imageprocessor
+from modules.utils.imageutil import imageprocessor,downloadanalyzermodel
 from modules.utils.imageremover import imageremover, RecursiveCleaner, FlatCleaner
-
-# MOVE THIS OUT TO UTILS OR ANALYZER
-from huggingface_hub import snapshot_download
-
-model_dir = "modules/analyzer/models/vit-base-patch16-224"
-needed_files = ["config.json", "pytorch_model.bin", "preprocessor_config.json"]
-
-if not all(os.path.exists(os.path.join(model_dir, f)) for f in needed_files):
-    snapshot_download(
-        repo_id="google/vit-base-patch16-224",
-        local_dir=model_dir,
-    )
-# --------------------------------------------------
 
 app = Flask(__name__)
 logger = logging.getLogger(__name__)
@@ -196,6 +183,10 @@ def clear_analyzed_button():
 
 
 if __name__ == '__main__':
+    # Call function the download model for analyzer if not already existing.
+    downloadanalyzermodel()
+    # --------------------------------------------------
+
     # Set if True if Development or False if Production (Production env not implemented)
     USE_DEV = True
     cfg = DevConfig if USE_DEV else ProdConfig
