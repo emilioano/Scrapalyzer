@@ -1,12 +1,11 @@
 import os
 import posixpath
 import logging
-from modules.scraper.scraper import Scraper
+from modules.scraper import Scraper
 from config import DevConfig, ProdConfig
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
-from modules.analyzer.analyzer import ImageAnalyzer
-from modules.utils.imageutil import imageprocessor,downloadanalyzermodel
-from modules.utils.imageremover import imageremover, RecursiveCleaner, FlatCleaner
+from modules.analyzer import ImageAnalyzer
+from modules.utils import imageprocessor,downloadanalyzermodel,imageremover, RecursiveCleaner, FlatCleaner
 
 app = Flask(__name__)
 logger = logging.getLogger(__name__)
