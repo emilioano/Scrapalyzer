@@ -123,5 +123,6 @@ Scrapalyzer/
 |   ├── test_app.py
 |   ├── test_imageremover.py
 |   └── test_imageutil.py
+├── pytest.ini
 └── README.md
 ```
