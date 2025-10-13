@@ -15,9 +15,26 @@ from torchvision.models.detection import maskrcnn_resnet50_fpn
 from torchvision.models.detection.mask_rcnn import MaskRCNN_ResNet50_FPN_Weights
 from torchvision.transforms import functional as F
 
+# Library for the analyzer model downloader
+from huggingface_hub import snapshot_download
+
 # Logger
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
+
+# Initialize local model used for analyzer.
+# Model url and files that is used for analyzer
+model_dir = "modules/analyzer/models/vit-base-patch16-224"
+needed_files = ["config.json", "pytorch_model.bin", "preprocessor_config.json"]
+
+# Download if it's not existing
+def downloadanalyzermodel():
+    if not all(os.path.exists(os.path.join(model_dir, f)) for f in needed_files):
+        snapshot_download(
+            repo_id="google/vit-base-patch16-224",
+            local_dir=model_dir,
+        )
+
 
 # Set where imagedownloader puts files.
 download_folder='data/downloads/'
@@ -32,7 +49,6 @@ size = 512
 
 # Set the minimum object image pixel size that will be considered for further processing. Both width and height considered. 
 min_size = 150
-
 
 class ImageProcessor(ABC):
     def __init__(self, id=None):
