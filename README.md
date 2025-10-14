@@ -80,6 +80,8 @@ source venv/bin/activate
 
 pip install -r requirements.txt
 
+python3 app.py
+
 -------------------
 
 ## Project Structure
@@ -122,7 +124,7 @@ Scrapalyzer/
 ├── tests/
 |   ├── test_app.py
 |   ├── test_imageremover.py
-|   └── test_imageutil.py
+|   └── test_scraper.py
 ├── pytest.ini
 └── README.md
 ```
