@@ -5,13 +5,12 @@ from modules.scraper import Scraper
 from config import DevConfig, ProdConfig
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from modules.analyzer import ImageAnalyzer
-from modules.utils import imageprocessor,downloadanalyzermodel,imageremover, RecursiveCleaner, FlatCleaner
+from modules.utils import imageprocessor, downloadanalyzermodel, imageremover, RecursiveCleaner, FlatCleaner
 
 app = Flask(__name__)
 logger = logging.getLogger(__name__)
 
 # Ensure directory exists
-
 
 def ensure_folder(folders: str | list) -> None:
     if isinstance(folders, str):
@@ -26,8 +25,7 @@ def ensure_folder(folders: str | list) -> None:
             logger.error(f' * Failed to ensure folder(s): {folders} {e}')
             raise
 
-# Simple helper function
-
+# Convert directory content to a list
 
 def dir_to_list(dir: str) -> list:
     if not os.path.exists(dir):
@@ -35,7 +33,6 @@ def dir_to_list(dir: str) -> list:
     return os.listdir(dir)
 
 # Get sub folders paths and category names
-
 
 def get_files_by_category(folder):
     category_list = []
@@ -72,7 +69,6 @@ def index():
 
 # Route to post url input by the user, sent to scrape
 
-
 @app.route('/scrape_form', methods=['POST'])
 def scrape_form():
     try:
@@ -95,7 +91,6 @@ def scrape_form():
     return redirect(url_for('index'))
 
 # Route to run the analyze script
-
 
 @app.route('/run_analyze', methods=['POST'])
 def run_analyze():
@@ -123,6 +118,7 @@ def run_analyze():
     return redirect(url_for('index'))
 
 # Route to run the analyze all script
+
 @app.route('/run_analyze_all')
 def run_analyze_all():
 
@@ -136,19 +132,17 @@ def run_analyze_all():
         analysed_dir=app.config["PROCESSED_DIR"],
         keywords=keywords_to_analyze
     )
-    
+
     # Reload index after keywords are sent
     return redirect(url_for('index'))
 
 # Serve files from downloads directory to website
-
 
 @app.route("/downloads/<path:filename>")
 def downloaded_image(filename):
     return send_from_directory(app.config["DOWNLOADS_DIR"], filename)
 
 # Serve files from analyzed directory to website
-
 
 @app.route("/data/analyzed/<path:filename>")
 def analyzed_image(filename):
@@ -184,7 +178,6 @@ def clear_analyzed_button():
 if __name__ == '__main__':
     # Call function the download model for analyzer if not already existing.
     downloadanalyzermodel()
-    # --------------------------------------------------
 
     # Set if True if Development or False if Production (Production env not implemented)
     USE_DEV = True
