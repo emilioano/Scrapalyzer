@@ -17,7 +17,7 @@ nomatch_path = 'data/analyzed/zero_matches/'
 class ImageAnalyzer:
     
     #constructor
-    def __init__(self, model_name=""):
+    def __init__(self):
 
         #load pretrained model from huggingface, load picprocesser, deciding GPU / CPU
         self.model = AutoModelForImageClassification.from_pretrained('modules/analyzer/models/vit-base-patch16-224',local_files_only=True)
@@ -46,11 +46,10 @@ class ImageAnalyzer:
             top_prob, top_idx = torch.max(probabilities, dim=1)
             predicted_label = self.model.config.id2label[top_idx.item()]
             confidence = top_prob.item()
-            #returning results as dictionary
+            #returning results as dictionary with confidence
             print(f'Predicted label: {predicted_label}')
             return {
                 "label": predicted_label,
-                #confidence": confidence,
                 "error": None
             }
         #errormessage if invalid
